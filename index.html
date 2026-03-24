@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>전자교반 고압주조 데이터 대시보드</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>전자교반 고압주조<br>데이터 대시보드</h1>
+        <div class="subtitle" id="fileInfo"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">데이터 필터</div>
+
+        <label>항목</label>
+        <select id="itemSelect"></select>
+
+        <label>집계 단위</label>
+        <select id="aggSelect">
+          <option value="교대별">교대별</option>
+          <option value="일별">일별</option>
+          <option value="월별">월별</option>
+        </select>
+
+        <label>교대</label>
+        <div class="check-group" id="shiftChecks">
+          <label><input type="checkbox" value="주간" checked> 주간</label>
+          <label><input type="checkbox" value="야간" checked> 야간</label>
+        </div>
+
+        <label>기준일 시작</label>
+        <input type="date" id="startDate">
+
+        <label>기준일 종료</label>
+        <input type="date" id="endDate">
+
+        <label>주조기 선택</label>
+        <div class="multi-select-wrap">
+          <div class="multi-actions">
+            <button type="button" class="mini-btn" id="selectAllUnits">전체선택</button>
+            <button type="button" class="mini-btn" id="clearAllUnits">전체해제</button>
+          </div>
+          <div id="unitChecks" class="unit-grid"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">표시 설정</div>
+        <label class="inline"><input type="checkbox" id="runningOnly"> 가동 데이터만 보기</label>
+
+        <label class="inline"><input type="checkbox" id="useYManual"> Y축 수동 설정</label>
+        <div class="row2">
+          <div>
+            <label>Y축 최소</label>
+            <input type="number" id="yMin" step="0.1">
+          </div>
+          <div>
+            <label>Y축 최대</label>
+            <input type="number" id="yMax" step="0.1">
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">이상치 기준</div>
+        <label class="inline"><input type="checkbox" id="useLower"> 하한값 사용</label>
+        <input type="number" id="lowerLimit" step="0.1" placeholder="하한값 입력">
+
+        <label class="inline"><input type="checkbox" id="useUpper"> 상한값 사용</label>
+        <input type="number" id="upperLimit" step="0.1" placeholder="상한값 입력">
+      </div>
+
+      <div class="section sticky-actions">
+        <button id="applyBtn" class="apply-btn">조회 / 갱신</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="summary-cards" id="summaryCards"></section>
+
+      <section class="chart-card">
+        <div class="chart-title-row">
+          <div>
+            <h2 id="chartTitle">트렌드 그래프</h2>
+            <div class="chart-subtitle" id="chartSubtitle"></div>
+          </div>
+        </div>
+        <div id="chart"></div>
+      </section>
+
+      <section class="table-card">
+        <div class="table-header">
+          <h2>이상치 알림</h2>
+          <button id="downloadCsvBtn" class="download-btn">CSV 다운로드</button>
+        </div>
+        <div id="outlierSummary" class="outlier-summary">이상치 기준을 설정하면 결과가 표시됩니다.</div>
+        <div class="table-wrap">
+          <table id="outlierTable">
+            <thead>
+              <tr>
+                <th>발생시각</th>
+                <th>구간</th>
+                <th>주조기</th>
+                <th>값</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
